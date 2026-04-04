@@ -1,18 +1,14 @@
 import express, { Router } from "express";
-import {
-    getAllPokemon,
-    getPokemonById,
-    createPokemon,
-    updatePokemon,
-    deletePokemon,
-} from "../controllers/pokemonController";
+import { validateRequest } from "../middleware/validate";
+import * as pokemonController from "../controllers/pokemonController";
+import { pokemonSchemas } from "../validation/pokemonSchemas";
 
 const router: Router = express.Router();
 
-router.get("/pokemon", getAllPokemon);
-router.get("/pokemon/:id", getPokemonById);
-router.post("/pokemon", createPokemon);
-router.put("/pokemon/:id", updatePokemon);
-router.delete("/pokemon/:id", deletePokemon);
+router.get("/pokemon", pokemonController.getAllPokemon);
+router.get("/pokemon/:id", validateRequest(pokemonSchemas.getById), pokemonController.getPokemonById);
+router.post("/pokemon", validateRequest(pokemonSchemas.create), pokemonController.createPokemon);
+router.put("/pokemon/:id", validateRequest(pokemonSchemas.update), pokemonController.updatePokemon);
+router.delete("/pokemon/:id", validateRequest(pokemonSchemas.delete), pokemonController.deletePokemon);
 
 export default router;
