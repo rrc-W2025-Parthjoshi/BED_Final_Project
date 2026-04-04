@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { HTTP_STATUS } from "../../../constants/httpsConstants";
 import * as pokemonService from "../services/pokemonService";
 
 /**
@@ -8,7 +9,7 @@ import * as pokemonService from "../services/pokemonService";
  */
 export const getAllPokemon = (req: Request, res: Response): void => {
     const pokemon = pokemonService.getAllPokemon();
-    res.status(200).json({ message: "Get all pokemon", data: pokemon });
+    res.status(HTTP_STATUS.OK).json({ message: "Get all pokemon", data: pokemon });
 };
 
 /**
@@ -19,7 +20,7 @@ export const getAllPokemon = (req: Request, res: Response): void => {
 export const getPokemonById = (req: Request, res: Response): void => {
     const { id } = req.params;
     const pokemon = pokemonService.getPokemonById(id);
-    res.status(200).json({ message: "Get pokemon", data: pokemon });
+    res.status(HTTP_STATUS.OK).json({ message: "Get pokemon", data: pokemon });
 };
 
 /**
@@ -29,7 +30,7 @@ export const getPokemonById = (req: Request, res: Response): void => {
  */
 export const createPokemon = (req: Request, res: Response): void => {
     const newPokemon = pokemonService.createPokemon(req.body);
-    res.status(201).json({ message: "Pokemon created", data: newPokemon });
+    res.status(HTTP_STATUS.CREATED).json({ message: "Pokemon created", data: newPokemon });
 };
 
 /**
@@ -40,7 +41,7 @@ export const createPokemon = (req: Request, res: Response): void => {
 export const updatePokemon = (req: Request, res: Response): void => {
     const { id } = req.params;
     const updatedPokemon = pokemonService.updatePokemon(id, req.body);
-    res.status(200).json({ message: "Pokemon updated", data: updatedPokemon });
+    res.status(HTTP_STATUS.OK).json({ message: "Pokemon updated", data: updatedPokemon });
 };
 
 /**
@@ -51,5 +52,5 @@ export const updatePokemon = (req: Request, res: Response): void => {
 export const deletePokemon = (req: Request, res: Response): void => {
     const { id } = req.params;
     pokemonService.deletePokemon(id);
-    res.status(200).json({ message: "Pokemon deleted" });
+    res.status(HTTP_STATUS.OK).json({ message: "Pokemon deleted" });
 };

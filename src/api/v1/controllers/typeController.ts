@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { HTTP_STATUS } from "../../../constants/httpsConstants";
 import * as typeService from "../services/typeService";
 
 /**
@@ -8,7 +9,7 @@ import * as typeService from "../services/typeService";
  */
 export const getAllTypes = (req: Request, res: Response): void => {
     const types = typeService.getAllTypes();
-    res.status(200).json({ message: "Get all types", data: types });
+    res.status(HTTP_STATUS.OK).json({ message: "Get all types", data: types });
 };
 
 /**
@@ -19,7 +20,7 @@ export const getAllTypes = (req: Request, res: Response): void => {
 export const getTypeById = (req: Request, res: Response): void => {
     const { id } = req.params;
     const type = typeService.getTypeById(id);
-    res.status(200).json({ message: "Get type", data: type });
+    res.status(HTTP_STATUS.OK).json({ message: "Get type", data: type });
 };
 
 /**
@@ -29,7 +30,7 @@ export const getTypeById = (req: Request, res: Response): void => {
  */
 export const createType = (req: Request, res: Response): void => {
     const newType = typeService.createType(req.body);
-    res.status(201).json({ message: "Type created", data: newType });
+    res.status(HTTP_STATUS.CREATED).json({ message: "Type created", data: newType });
 };
 
 /**
@@ -40,7 +41,7 @@ export const createType = (req: Request, res: Response): void => {
 export const updateType = (req: Request, res: Response): void => {
     const { id } = req.params;
     const updatedType = typeService.updateType(id, req.body);
-    res.status(200).json({ message: "Type updated", data: updatedType });
+    res.status(HTTP_STATUS.OK).json({ message: "Type updated", data: updatedType });
 };
 
 /**
@@ -51,5 +52,5 @@ export const updateType = (req: Request, res: Response): void => {
 export const deleteType = (req: Request, res: Response): void => {
     const { id } = req.params;
     typeService.deleteType(id);
-    res.status(200).json({ message: "Type deleted" });
+    res.status(HTTP_STATUS.OK).json({ message: "Type deleted" });
 };
