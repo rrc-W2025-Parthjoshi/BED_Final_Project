@@ -1,56 +1,82 @@
-import { Request, Response } from "express";
-import { HTTP_STATUS } from "../../../constants/httpsConstants";
+import { Request, Response, NextFunction } from "express";
 import * as teamService from "../services/teamService";
+import { successResponse } from "../models/responseModel";
+import { HTTP_STATUS } from "../../../constants/httpsConstants";
 
 /**
  * Get all teams
  * @param req - Express request object
  * @param res - Express response object
+ * @param next - Express next function
  */
-export const getAllTeams = (req: Request, res: Response): void => {
-    const teams = teamService.getAllTeams();
-    res.status(HTTP_STATUS.OK).json({ message: "Get all teams", data: teams });
+export const getAllTeams = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const teams = await teamService.getAllTeams();
+        res.status(HTTP_STATUS.OK).json(successResponse(teams, "Get all teams"));
+    } catch (error: unknown) {
+        next(error);
+    }
 };
 
 /**
  * Get a single team by ID
  * @param req - Express request object
  * @param res - Express response object
+ * @param next - Express next function
  */
-export const getTeamById = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    const team = teamService.getTeamById(id);
-    res.status(HTTP_STATUS.OK).json({ message: "Get team", data: team });
+export const getTeamById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const team = await teamService.getTeamById(id);
+        res.status(HTTP_STATUS.OK).json(successResponse(team, "Get team"));
+    } catch (error: unknown) {
+        next(error);
+    }
 };
 
 /**
  * Create a new team
  * @param req - Express request object
  * @param res - Express response object
+ * @param next - Express next function
  */
-export const createTeam = (req: Request, res: Response): void => {
-    const newTeam = teamService.createTeam(req.body);
-    res.status(HTTP_STATUS.CREATED).json({ message: "Team created", data: newTeam });
+export const createTeam = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const teamId = await teamService.createTeam(req.body);
+        res.status(HTTP_STATUS.CREATED).json(successResponse({ id: teamId }, "Team created"));
+    } catch (error: unknown) {
+        next(error);
+    }
 };
 
 /**
  * Update a team
  * @param req - Express request object
  * @param res - Express response object
+ * @param next - Express next function
  */
-export const updateTeam = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    const updatedTeam = teamService.updateTeam(id, req.body);
-    res.status(HTTP_STATUS.OK).json({ message: "Team updated", data: updatedTeam });
+export const updateTeam = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { id } = req.params;
+        await teamService.updateTeam(id, req.body);
+        res.status(HTTP_STATUS.OK).json(successResponse({}, "Team updated"));
+    } catch (error: unknown) {
+        next(error);
+    }
 };
 
 /**
  * Delete a team
  * @param req - Express request object
  * @param res - Express response object
+ * @param next - Express next function
  */
-export const deleteTeam = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    teamService.deleteTeam(id);
-    res.status(HTTP_STATUS.OK).json({ message: "Team deleted" });
+export const deleteTeam = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { id } = req.params;
+        await teamService.deleteTeam(id);
+        res.status(HTTP_STATUS.OK).json(successResponse({}, "Team deleted"));
+    } catch (error: unknown) {
+        next(error);
+    }
 };
