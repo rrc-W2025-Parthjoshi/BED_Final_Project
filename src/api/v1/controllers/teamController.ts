@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as teamService from "../services/teamService";
 import { successResponse } from "../models/responseModel";
-import { HTTP_STATUS } from "../../../constants/httpsConstants";
+import { HTTP_STATUS } from "../../../constants/httpConstants";
 
 /**
  * Get all teams
