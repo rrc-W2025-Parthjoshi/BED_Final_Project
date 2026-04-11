@@ -1,69 +1,75 @@
-/**
- * Represents a Team in the system
- */
-interface Team {
-    id: string;
-    name: string;
-    pokemonIds: string[];
-}
+import { Team } from "../models/teamModel";
+import * as firestoreRepository from "../repositories/firestoreRepository";
 
-const teams: Team[] = [];
+const TEAMS_COLLECTION = "teams";
 
 /**
  * Retrieves all teams
  * @returns Array of all teams
  */
-export const getAllTeams = (): Team[] => {
-    return teams;
+export const getAllTeams = async (): Promise<Team[]> => {
+    try {
+        const snapshot = await firestoreRepository.getDocuments(TEAMS_COLLECTION);
+        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Team));
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to get teams: ${errorMessage}`);
+    }
 };
 
 /**
  * Retrieves a single team by ID
  * @param id - The ID of the team
- * @returns The team or undefined
+ * @returns The team or null
  */
-export const getTeamById = (id: string): Team | undefined => {
-    return teams.find((t: Team) => t.id === id);
+export const getTeamById = async (id: string): Promise<Team | null> => {
+    try {
+        const doc = await firestoreRepository.getDocumentById(TEAMS_COLLECTION, id);
+        if (!doc) return null;
+        return { id: doc.id, ...doc.data() } as Team;
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to get team ${id}: ${errorMessage}`);
+    }
 };
 
 /**
  * Creates a new team
  * @param teamData - The data for the new team
- * @returns The created team
+ * @returns The ID of the created team
  */
-export const createTeam = (teamData: { name: string; pokemonIds: string[] }): Team => {
-    const newTeam: Team = {
-        id: Date.now().toString(),
-        name: teamData.name,
-        pokemonIds: teamData.pokemonIds,
-    };
-    teams.push(newTeam);
-    return newTeam;
+export const createTeam = async (teamData: Partial<Team>): Promise<string> => {
+    try {
+        return await firestoreRepository.createDocument<Team>(TEAMS_COLLECTION, teamData);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to create team: ${errorMessage}`);
+    }
 };
 
 /**
  * Updates an existing team
  * @param id - The ID of the team to update
  * @param teamData - The fields to update
- * @returns The updated team
  */
-export const updateTeam = (id: string, teamData: Partial<Team>): Team => {
-    const index: number = teams.findIndex((t: Team) => t.id === id);
-    if (index === -1) {
-        throw new Error(`Team with ID ${id} not found`);
+export const updateTeam = async (id: string, teamData: Partial<Team>): Promise<void> => {
+    try {
+        await firestoreRepository.updateDocument<Team>(TEAMS_COLLECTION, id, teamData);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to update team ${id}: ${errorMessage}`);
     }
-    teams[index] = { ...teams[index], ...teamData };
-    return teams[index];
 };
 
 /**
  * Deletes a team
  * @param id - The ID of the team to delete
  */
-export const deleteTeam = (id: string): void => {
-    const index: number = teams.findIndex((t: Team) => t.id === id);
-    if (index === -1) {
-        throw new Error(`Team with ID ${id} not found`);
+export const deleteTeam = async (id: string): Promise<void> => {
+    try {
+        await firestoreRepository.deleteDocument(TEAMS_COLLECTION, id);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to delete team ${id}: ${errorMessage}`);
     }
-    teams.splice(index, 1);
 };
