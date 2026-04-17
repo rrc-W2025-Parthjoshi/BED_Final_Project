@@ -1,8 +1,17 @@
 import express, { Express } from "express";
-import morgan from "morgan";
+import dotenv from "dotenv";
+
+// Load environment variables BEFORE your internal imports!
+dotenv.config();
+
 import rateLimit from "express-rate-limit";
-import { accessLogger, errorLogger, consoleLogger } from "./api/v1/middleware/logger";
+import {
+    accessLogger,
+    errorLogger,
+    consoleLogger,
+} from "./api/v1/middleware/logger";
 import errorHandler from "./api/v1/middleware/errorHandler";
+import setupSwagger from "../config/swagger";
 import healthRoutes from "./api/v1/routes/healthRoutes";
 import pokemonRoutes from "./api/v1/routes/pokemonRoutes";
 import typeRoutes from "./api/v1/routes/typeRoutes";
@@ -33,6 +42,9 @@ if (process.env.NODE_ENV === "production") {
 
 // Body parsing middleware
 app.use(express.json());
+
+// Setup Swagger
+setupSwagger(app);
 
 // Routes
 app.use("/api/v1", healthRoutes);
