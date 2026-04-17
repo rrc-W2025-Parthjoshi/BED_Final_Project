@@ -5,7 +5,28 @@ import isAuthorized from "../middleware/authorize";
 
 const router: Router = express.Router();
 
-// Only admins can view detailed user information
+/**
+ * @openapi
+ * /users/{id}:
+ *   get:
+ *     summary: Get user details by ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user details
+ *       '401':
+ *         description: Unauthorized
+ *       '403':
+ *         description: Forbidden
+ */
 router.get(
     "/:id",
     authenticate,
