@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import rateLimit from "express-rate-limit";
+import cors from "cors";
+import { getHelmetConfig } from "../config/helmetConfig";
 import {
     accessLogger,
     errorLogger,
@@ -21,6 +23,10 @@ import userRoutes from "./api/v1/routes/userRoutes";
 
 // Initialize Express application
 const app: Express = express();
+
+// Security middleware
+app.use(getHelmetConfig());
+app.use(cors());
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
