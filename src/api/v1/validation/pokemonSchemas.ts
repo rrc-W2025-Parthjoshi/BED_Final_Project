@@ -1,5 +1,35 @@
 import Joi from "joi";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Pokemon:
+ *       type: object
+ *       required:
+ *         - name
+ *         - type
+ *         - abilities
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the Pokemon
+ *           example: "abc123"
+ *         name:
+ *           type: string
+ *           description: Name of the Pokemon
+ *           example: "Pikachu"
+ *         type:
+ *           type: string
+ *           description: Type of the Pokemon
+ *           example: "Electric"
+ *         abilities:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of abilities
+ *           example: ["Static", "Lightning Rod"]
+ */
 export const pokemonSchemas = {
     // POST /pokemon - Create new pokemon
     create: {

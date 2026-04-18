@@ -1,5 +1,30 @@
 import Joi from "joi";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Team:
+ *       type: object
+ *       required:
+ *         - name
+ *         - pokemonIds
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the team
+ *           example: "abc123"
+ *         name:
+ *           type: string
+ *           description: Name of the team
+ *           example: "Dream Team"
+ *         pokemonIds:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of Pokemon IDs in the team
+ *           example: ["abc123", "def456"]
+ */
 export const teamSchemas = {
     // POST /teams - Create new team
     create: {

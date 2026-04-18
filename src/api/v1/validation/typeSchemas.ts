@@ -1,5 +1,23 @@
 import Joi from "joi";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Type:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the type
+ *           example: "abc123"
+ *         name:
+ *           type: string
+ *           description: Name of the type
+ *           example: "Electric"
+ */
 export const typeSchemas = {
     // POST /types - Create new type
     create: {
