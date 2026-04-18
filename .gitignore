@@ -3,3 +3,4 @@ dist/
 config/serviceKey.json
 logs/
 *.log
+.env
